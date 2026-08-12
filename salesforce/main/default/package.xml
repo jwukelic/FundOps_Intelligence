@@ -34,5 +34,14 @@
     <members>FundOps_Signal__c</members>
     <name>CustomObject</name>
   </types>
+  <types>
+    <members>FundOps_Reports/FundOps_Priority_Accounts</members>
+    <members>FundOps_Reports/FundOps_Upcoming_Actions</members>
+    <name>Report</name>
+  </types>
+  <types>
+    <members>FundOps_Dashboards/FundOps_Pipeline</members>
+    <name>Dashboard</name>
+  </types>
   <version>61.0</version>
 </Package>

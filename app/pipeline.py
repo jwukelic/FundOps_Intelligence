@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from typing import TYPE_CHECKING
 
 from app.config import Settings
 from app.connectors.google_sheets import GoogleSheetsConnector
@@ -11,11 +12,15 @@ from app.services.audit import build_audit_entry
 from app.services.intelligence import build_account_summary, recommend_next_action
 from app.services.signal_normalization import deduplicate_signals, signal_hash
 
+if TYPE_CHECKING:
+    from app.services.bigquery_writer import BigQueryWriter
+
 
 def run_pipeline(
     settings: Settings,
     salesforce: SalesforceConnector,
     sheets: GoogleSheetsConnector,
+    bq_writer: BigQueryWriter | None = None,
 ) -> PipelineResult:
     result = PipelineResult()
     accounts = salesforce.query_enabled_accounts(limit=settings.fundops_max_accounts)
@@ -37,6 +42,7 @@ def run_pipeline(
         next_action = recommend_next_action(components)
         summary = build_account_summary(program, score, priority, ["decision-maker unknown"])
 
+        old_score = account.get("FundOps_Score__c")
         salesforce.upsert_account_fields(
             account_id,
             {
@@ -67,6 +73,8 @@ def run_pipeline(
         )
         for deduped in deduplicate_signals([signal]):
             salesforce.upsert_signal(deduped)
+            if bq_writer is not None:
+                bq_writer.write_signal(deduped)
 
         due = (now + timedelta(days=5)).date().isoformat()
         salesforce.upsert_task(
@@ -77,7 +85,24 @@ def run_pipeline(
             source_url="internal://fundops/scoring",
         )
 
-        _ = build_audit_entry("Account", account_id, "FundOps_Score__c", account.get("FundOps_Score__c"), score)
+        audit = build_audit_entry("Account", account_id, "FundOps_Score__c", old_score, score)
+        if bq_writer is not None:
+            bq_writer.write_score(
+                account_id=account_id,
+                program=program,
+                score=score,
+                priority=priority,
+                components=component_scores,
+                explanation=summary,
+            )
+            bq_writer.write_audit(
+                audit["entity_type"],
+                audit["entity_id"],
+                audit["field_name"],
+                audit["old_value"],
+                audit["new_value"],
+            )
+
         result.scored_accounts += 1
         result.created_or_updated_tasks += 1
         result.details[account_id] = {
@@ -104,5 +129,14 @@ def run_pipeline(
         )
         sheets.mark_processed(row.row_id, external_id)
         result.processed_opportunities += 1
+
+    if bq_writer is not None:
+        bq_writer.write_connector_run(
+            connector="pipeline",
+            status="success" if not result.errors else "partial_failure",
+            processed_count=result.scored_accounts + result.processed_opportunities,
+            error_count=len(result.errors),
+            error_summary="; ".join(result.errors),
+        )
 
     return result

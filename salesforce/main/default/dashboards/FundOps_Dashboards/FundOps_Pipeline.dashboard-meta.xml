@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata">
+  <description>FundOps Intelligence Pipeline Dashboard. Shows live priority scores, actions due, and program breakdown for Believe in Me, Cougs 4 Kids, and iLevelUP.</description>
+  <leftSection>
+    <columnSize>Medium</columnSize>
+    <components>
+      <chartAxisRange>Auto</chartAxisRange>
+      <componentType>Gauge</componentType>
+      <displayUnits>Integer</displayUnits>
+      <footer>As of last daily pipeline run</footer>
+      <header>Critical + High Priority Accounts</header>
+      <indicatorBreakpoint1>1</indicatorBreakpoint1>
+      <indicatorBreakpoint2>5</indicatorBreakpoint2>
+      <indicatorHighColor>#54C254</indicatorHighColor>
+      <indicatorLowColor>#E84D4D</indicatorLowColor>
+      <indicatorMiddleColor>#FFB75D</indicatorMiddleColor>
+      <maxColumn>1</maxColumn>
+      <reportSnapshot>FundOps_Reports/FundOps_Priority_Accounts</reportSnapshot>
+      <showPercentage>false</showPercentage>
+      <showRange>true</showRange>
+      <showTotal>true</showTotal>
+      <showValues>true</showValues>
+      <title>High Priority Count</title>
+    </components>
+  </leftSection>
+  <middleSection>
+    <columnSize>Medium</columnSize>
+    <components>
+      <chartAxisRange>Auto</chartAxisRange>
+      <componentType>Bar</componentType>
+      <displayUnits>Auto</displayUnits>
+      <footer>Score 0–100 per account</footer>
+      <groupingColumn>FundOps_Priority__c</groupingColumn>
+      <header>Score Distribution by Priority</header>
+      <legendPosition>Bottom</legendPosition>
+      <reportSnapshot>FundOps_Reports/FundOps_Priority_Accounts</reportSnapshot>
+      <showPercentage>false</showPercentage>
+      <showPictogram>false</showPictogram>
+      <showTotal>false</showTotal>
+      <showValues>true</showValues>
+      <sortBy>RowLabelAscending</sortBy>
+      <title>Priority Score Breakdown</title>
+    </components>
+  </middleSection>
+  <rightSection>
+    <columnSize>Medium</columnSize>
+    <components>
+      <chartAxisRange>Auto</chartAxisRange>
+      <componentType>List</componentType>
+      <displayUnits>Auto</displayUnits>
+      <footer>Open [FundOps] tasks sorted by due date</footer>
+      <header>Upcoming Actions</header>
+      <listColumn>TASK_SUBJECT</listColumn>
+      <listColumn>ACCOUNT_NAME</listColumn>
+      <listColumn>ACTIVITY_DATE</listColumn>
+      <maxValuesDisplayed>10</maxValuesDisplayed>
+      <reportSnapshot>FundOps_Reports/FundOps_Upcoming_Actions</reportSnapshot>
+      <showPercentage>false</showPercentage>
+      <showTotal>false</showTotal>
+      <showValues>true</showValues>
+      <sortBy>RowLabelAscending</sortBy>
+      <title>Next 10 Actions Due</title>
+    </components>
+  </rightSection>
+  <runningUser>julie@fundops</runningUser>
+  <title>FundOps Intelligence Pipeline</title>
+  <backgroundEndColor>#F3F3F3</backgroundEndColor>
+  <backgroundStartColor>#FFFFFF</backgroundStartColor>
+  <chartTheme>default</chartTheme>
+  <colorPalette>default</colorPalette>
+  <dashboardFilters>
+    <dashboardFilterOptions>
+      <operator>equals</operator>
+      <values>Believe in Me</values>
+    </dashboardFilterOptions>
+    <dashboardFilterOptions>
+      <operator>equals</operator>
+      <values>Cougs 4 Kids</values>
+    </dashboardFilterOptions>
+    <dashboardFilterOptions>
+      <operator>equals</operator>
+      <values>iLevelUP</values>
+    </dashboardFilterOptions>
+    <name>Program</name>
+  </dashboardFilters>
+  <isGridLayout>false</isGridLayout>
+  <textColor>#000000</textColor>
+  <title>FundOps Intelligence Pipeline</title>
+  <titleColor>#000000</titleColor>
+  <titleSize>12</titleSize>
+</Dashboard>
