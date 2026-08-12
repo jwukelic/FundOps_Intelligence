@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from app.config import Settings
 from app.connectors.google_drive import GoogleDriveConnector
 from app.connectors.google_sheets import GoogleSheetsConnector
+from app.connectors.irs990 import Irs990Connector
 from app.connectors.salesforce import SalesforceConnector
 from app.models import PipelineResult, Signal
 from app.scoring import score_priority
@@ -24,6 +25,7 @@ def run_pipeline(
     sheets: GoogleSheetsConnector,
     bq_writer: BigQueryWriter | None = None,
     drive: GoogleDriveConnector | None = None,
+    irs990: Irs990Connector | None = None,
 ) -> PipelineResult:
     result = PipelineResult()
 
@@ -41,6 +43,7 @@ def run_pipeline(
                 salesforce=salesforce,
                 bq_writer=bq_writer,
                 drive_docs=drive_docs,
+                irs990=irs990,
                 result=result,
             )
         except Exception as exc:  # noqa: BLE001
@@ -120,13 +123,19 @@ def _process_account(
     bq_writer: BigQueryWriter | None,
     drive_docs: list,
     result: PipelineResult,
+    irs990: Irs990Connector | None = None,
 ) -> None:
     account_id = account["Id"]
     program = account.get("FundOps_Primary_Program__c", "Unknown")
     old_score = account.get("FundOps_Score__c")
 
-    # Derive components from stored signals + Drive evidence.
+    # Derive components from stored signals + Drive evidence + IRS 990.
     existing_signals = salesforce.query_signals_for_account(account_id)
+    if irs990 is not None:
+        for sig_dict in irs990.build_signals(account):
+            # Upsert into Salesforce so the signal persists for future runs.
+            salesforce.upsert_signal_from_dict(sig_dict)
+            existing_signals.append(sig_dict)
     components = score_from_account(account, existing_signals, drive_docs=drive_docs)
 
     score, priority, component_scores = score_priority(components)

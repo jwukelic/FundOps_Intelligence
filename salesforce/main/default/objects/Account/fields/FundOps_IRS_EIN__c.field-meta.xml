@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>FundOps_IRS_EIN__c</fullName>
+  <label>FundOps IRS EIN</label>
+  <type>Text</type>
+  <length>20</length>
+  <description>Optional IRS Employer Identification Number for precise IRS 990 lookup. Format: 12-3456789.</description>
+</CustomField>

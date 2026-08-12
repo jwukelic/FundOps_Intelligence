@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     fundops_connector_mailchimp_enabled: bool = False
     fundops_connector_google_ads_enabled: bool = False
     fundops_connector_hootsuite_enabled: bool = False
+    fundops_irs990_enabled: bool = False
     fundops_intake_sheet_id: str = ""
     fundops_approved_drive_folder_id: str = ""
     fundops_app_secret: str = ""
