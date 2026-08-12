@@ -71,11 +71,32 @@ def run_pipeline(
                 },
             )
             sheets.mark_processed(row.row_id, external_id)
+            if bq_writer is not None:
+                bq_writer.write_opportunity_intake(
+                    row_id=row.row_id,
+                    source_url=row.url,
+                    organization=row.organization,
+                    program=row.program,
+                    opportunity_type=row.opportunity_type,
+                    process_status="processed",
+                    salesforce_opportunity_id=external_id,
+                )
             result.processed_opportunities += 1
         except Exception as exc:  # noqa: BLE001
             error_msg = f"Intake row {row.row_id}: {exc}"
             result.errors.append(error_msg)
             sheets.mark_processed(row.row_id, "", error=str(exc)[:255])
+            if bq_writer is not None:
+                bq_writer.write_opportunity_intake(
+                    row_id=row.row_id,
+                    source_url=row.url,
+                    organization=row.organization,
+                    program=row.program,
+                    opportunity_type=row.opportunity_type,
+                    process_status="error",
+                    salesforce_opportunity_id="",
+                    error=str(exc)[:255],
+                )
 
     if bq_writer is not None:
         bq_writer.write_connector_run(

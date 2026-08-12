@@ -136,3 +136,33 @@ class BigQueryWriter:
                 }
             ],
         )
+
+    def write_opportunity_intake(
+        self,
+        row_id: str,
+        source_url: str,
+        organization: str,
+        program: str,
+        opportunity_type: str,
+        process_status: str,
+        salesforce_opportunity_id: str,
+        error: str = "",
+    ) -> None:
+        now = datetime.now(timezone.utc)
+        self._bq.insert_rows(
+            "opportunity_intake",
+            [
+                {
+                    "intake_date": now.date().isoformat(),
+                    "row_id": row_id,
+                    "source_url": source_url,
+                    "organization": organization,
+                    "program": program,
+                    "opportunity_type": opportunity_type,
+                    "process_status": process_status,
+                    "salesforce_opportunity_id": salesforce_opportunity_id,
+                    "last_processed": now.isoformat(),
+                    "error": error,
+                }
+            ],
+        )

@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
 
 from app.connectors.bigquery_client import BigQueryClient, InMemoryBigQueryStore
+from app.connectors.google_sheets import GoogleSheetsConnector
+from app.connectors.salesforce import InMemorySalesforceStore, SalesforceConnector
 from app.models import Signal
 from app.services.bigquery_cache import BigQueryAICache
 from app.services.bigquery_writer import BigQueryWriter
@@ -127,6 +129,25 @@ def test_bq_writer_write_connector_run():
     assert rows[0]["processed_count"] == 3
 
 
+def test_bq_writer_write_opportunity_intake():
+    bq, store = _make_bq()
+    writer = BigQueryWriter(bq)
+    writer.write_opportunity_intake(
+        row_id="row-1",
+        source_url="https://example.org/grant",
+        organization="Example Org",
+        program="Believe in Me",
+        opportunity_type="Grant",
+        process_status="processed",
+        salesforce_opportunity_id="opp-123",
+    )
+    rows = store.query_table("opportunity_intake")
+    assert len(rows) == 1
+    assert rows[0]["row_id"] == "row-1"
+    assert rows[0]["process_status"] == "processed"
+    assert rows[0]["salesforce_opportunity_id"] == "opp-123"
+
+
 # ---------------------------------------------------------------------------
 # Pipeline integration with BigQueryWriter
 # ---------------------------------------------------------------------------
@@ -134,8 +155,6 @@ def test_bq_writer_write_connector_run():
 
 def test_pipeline_writes_scores_and_signals_to_bq():
     from app.config import Settings
-    from app.connectors.google_sheets import GoogleSheetsConnector
-    from app.connectors.salesforce import InMemorySalesforceStore, SalesforceConnector
     from app.pipeline import run_pipeline
 
     sf_store = InMemorySalesforceStore(
@@ -159,3 +178,43 @@ def test_pipeline_writes_scores_and_signals_to_bq():
     assert len(bq_store.query_table("signals")) == 1
     assert len(bq_store.query_table("audit_log")) == 1
     assert len(bq_store.query_table("connector_runs")) == 1
+
+
+def test_pipeline_writes_intake_rows_to_bq():
+    from app.config import Settings
+    from app.models import OpportunityInput
+    from app.pipeline import run_pipeline
+
+    class StaticSheets(GoogleSheetsConnector):
+        def list_new_or_changed_intake_rows(self) -> list[OpportunityInput]:
+            return [
+                OpportunityInput(
+                    row_id="row-1",
+                    url="https://example.org/grant",
+                    organization="Example Org",
+                    program="Believe in Me",
+                    opportunity_type="Grant",
+                )
+            ]
+
+    sf_store = InMemorySalesforceStore(
+        accounts={},
+        opportunities={},
+        tasks={},
+        signals={},
+    )
+    bq, bq_store = _make_bq()
+    writer = BigQueryWriter(bq)
+
+    result = run_pipeline(
+        settings=Settings(fundops_max_accounts=0),
+        salesforce=SalesforceConnector(sf_store),
+        sheets=StaticSheets(),
+        bq_writer=writer,
+    )
+
+    assert result.processed_opportunities == 1
+    rows = bq_store.query_table("opportunity_intake")
+    assert len(rows) == 1
+    assert rows[0]["row_id"] == "row-1"
+    assert rows[0]["process_status"] == "processed"
