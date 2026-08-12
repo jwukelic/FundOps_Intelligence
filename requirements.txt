@@ -5,6 +5,7 @@ pydantic-settings==2.10.1
 google-cloud-bigquery==3.35.1
 google-cloud-secret-manager==2.24.0
 google-auth==2.40.3
+google-api-python-client==2.172.0
 openai==1.99.9
 requests==2.32.4
 simple-salesforce==1.12.9

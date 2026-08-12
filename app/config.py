@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     fundops_intake_sheet_id: str = ""
     fundops_approved_drive_folder_id: str = ""
     fundops_app_secret: str = ""
+    host: str = "0.0.0.0"
+    port: int = 8080
 
 
 def get_settings() -> Settings:

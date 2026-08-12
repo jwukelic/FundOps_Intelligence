@@ -19,6 +19,7 @@
     <members>Account.FundOps_Last_Refresh__c</members>
     <members>Account.FundOps_Refresh_Requested__c</members>
     <members>Account.FundOps_Last_Error__c</members>
+    <members>Account.FundOps_IRS_EIN__c</members>
     <members>Opportunity.FundOps_Program__c</members>
     <members>Opportunity.FundOps_Opportunity_Type__c</members>
     <members>Opportunity.FundOps_Eligibility__c</members>

@@ -17,6 +17,7 @@ FundOps Intelligence is a production-first fundraising intelligence MVP for Beli
 ```bash
 PROJECT_ID=<gcp-project> REGION=us-central1 ./scripts/bootstrap_gcp.sh
 PROJECT_ID=<gcp-project> ./scripts/create_secrets.sh
+# Populate each secret with: printf '%s' 'value' | gcloud secrets versions add <name> --data-file=- --project <gcp-project>
 SF_TARGET_ORG=<your-sf-alias> ./scripts/deploy_salesforce.sh
 PROJECT_ID=<gcp-project> REGION=us-central1 ./scripts/deploy.sh
 ```

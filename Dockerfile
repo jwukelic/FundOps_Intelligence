@@ -5,4 +5,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+# Default: run as Cloud Run service.
+# Set RUN_MODE=job to run as a Cloud Run job (single execution, then exit).
+CMD ["python", "-m", "app.main"]
