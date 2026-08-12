@@ -26,9 +26,53 @@ class SalesforceConnector:
         enabled = [a for a in self.store.accounts.values() if a.get("FundOps_Enabled__c")]
         return enabled[:limit]
 
+    def query_signals_for_account(self, account_id: str) -> list[dict[str, Any]]:
+        """Return all stored signals whose Account__c matches *account_id*."""
+        return [s for s in self.store.signals.values() if s.get("Account__c") == account_id]
+
     def upsert_account_fields(self, account_id: str, fields: dict[str, Any]) -> None:
         account = self.store.accounts.setdefault(account_id, {"Id": account_id})
         account.update(fields)
+
+    def upsert_signal(self, signal: Signal) -> None:
+        self.store.signals[signal.external_id] = {
+            "External_ID__c": signal.external_id,
+            "Account__c": signal.account_id,
+            "Program__c": signal.program,
+            "Signal_Type__c": signal.signal_type,
+            "Observed_At__c": signal.observed_at.isoformat(),
+            "Observation_Type__c": "Observed",
+            "Strength__c": signal.strength,
+            "Confidence__c": signal.confidence,
+            "Summary__c": signal.summary,
+            "Source_Name__c": signal.source_name,
+            "Source_URL__c": signal.source_url,
+            "Raw_Hash__c": signal.raw_hash,
+        }
+
+    def upsert_task(self, account_id: str, action_type: str, why: str, due_date: str, source_url: str) -> None:
+        external_id = hashlib.sha256(f"{account_id}|{action_type}".encode("utf-8")).hexdigest()
+        self.store.tasks[external_id] = {
+            "External_ID__c": external_id,
+            "WhatId": account_id,
+            "Subject": f"[FundOps] {action_type}",
+            "Description": (
+                f"Why: {why}\nSupporting evidence: {source_url}\n"
+                f"Suggested due date: {due_date}\nSuggested talking points: review mission fit and eligibility"
+            ),
+            "Status": "Not Started",
+            "Priority": "Normal",
+            "ActivityDate": due_date,
+        }
+
+    def upsert_opportunity(self, external_id: str, payload: dict[str, Any]) -> None:
+        record = self.store.opportunities.setdefault(external_id, {"FundOps_External_ID__c": external_id})
+        record.update(payload)
+
+    @staticmethod
+    def utc_now() -> str:
+        return datetime.now(timezone.utc).isoformat()
+
 
     def upsert_signal(self, signal: Signal) -> None:
         self.store.signals[signal.external_id] = {
