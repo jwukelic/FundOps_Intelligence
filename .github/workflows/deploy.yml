@@ -1,0 +1,23 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run minimal tests
+        run: pytest -q
+      - name: Build image
+        run: echo "Use scripts/deploy.sh in production context with authenticated gcloud"
+      - name: Smoke-test placeholder
+        run: echo "Run scripts/smoke_test.sh post deploy"

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>FundOps_Next_Action__c</fullName>
+  <label>FundOps Next Action</label>
+  <type>LongTextArea</type><length>32768</length><visibleLines>4</visibleLines>
+</CustomField>
