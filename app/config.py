@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     enable_connector_google_ads: bool = False
     google_ads_customer_id: str = ""
     google_ads_developer_token_secret: str = ""
+    google_ads_oauth_token_secret: str = ""
     google_ads_login_customer_id: str = ""
 
     enable_connector_hootsuite: bool = False

@@ -49,6 +49,8 @@ def build_runtime(settings: Settings):
             settings.google_ads_customer_id,
             secret_provider.get(settings.google_ads_developer_token_secret),
             settings.enable_connector_google_ads,
+            oauth_token=secret_provider.get(settings.google_ads_oauth_token_secret),
+            login_customer_id=settings.google_ads_login_customer_id,
         ),
         HootsuiteConnector(
             secret_provider.get(settings.hootsuite_api_token_secret),
