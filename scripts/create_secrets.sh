@@ -15,6 +15,7 @@ SECRETS=(
   fundops-mailchimp-api-key
   fundops-mailchimp-server-prefix
   fundops-google-ads-developer-token
+  fundops-google-ads-oauth-token
   fundops-hootsuite-api-token
 )
 
