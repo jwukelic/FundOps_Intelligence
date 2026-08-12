@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS `fundops.scores` (
   total_score FLOAT64 NOT NULL,
   priority STRING NOT NULL,
   reasons ARRAY<STRING>,
-  supporting_sources ARRAY<STRING>
+  supporting_sources ARRAY<STRING>,
+  scored_at TIMESTAMP
 )
 CLUSTER BY entity_type, entity_key;
 
