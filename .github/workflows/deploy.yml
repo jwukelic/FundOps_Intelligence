@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -59,4 +61,3 @@ jobs:
           PREVIOUS_SERVICE_REVISION: ${{ steps.previous.outputs.service_revision }}
           PREVIOUS_JOB_IMAGE: ${{ steps.previous.outputs.job_image }}
         run: scripts/rollback.sh
-
