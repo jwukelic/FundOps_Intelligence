@@ -56,7 +56,7 @@ def run_pipeline(
 
     for row in sheets.list_new_or_changed_intake_rows():
         try:
-            external_id = f"opp-{hash(row.url)}"
+            external_id = _opportunity_external_id(row.url)
             salesforce.upsert_opportunity(
                 external_id,
                 {
@@ -87,6 +87,10 @@ def run_pipeline(
         )
 
     return result
+
+
+def _opportunity_external_id(url: str) -> str:
+    return f"opp-{signal_hash([url.strip()])}"
 
 
 def _process_account(
@@ -197,4 +201,3 @@ def _collect_unknowns(components) -> list[str]:
         if getattr(components, attr, 100) < LOW:
             unknowns.append(label)
     return unknowns or ["none flagged"]
-
