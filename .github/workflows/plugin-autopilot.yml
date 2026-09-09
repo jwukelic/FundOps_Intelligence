@@ -1,0 +1,33 @@
+name: ChatGPT & Codex Plugin Autopilot
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugin-autopilot-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  autopilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: ChatGPT & Codex Plugin Autopilot
+        uses: imMamdouhaboammar/chatgpt-codex-plugin-autopilot@648cd6770c2ecaac448f2f38b0f2240b2863ad44 # v0.7.0
+        with:
+          path: '.'
+          action: 'auto'
+          output-dir: '${{ runner.temp }}/plugin-autopilot'
+          fail-on-error: 'true'
+          summary: 'true'
