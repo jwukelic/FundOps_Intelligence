@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+  <description>Open [FundOps] tasks grouped by due date and priority. Helps Julie see what actions are due this week across all three programs.</description>
+  <format>Summary</format>
+  <name>FundOps Upcoming Actions</name>
+  <reportType>Tasks</reportType>
+  <columns>
+    <field>TASK_SUBJECT</field>
+  </columns>
+  <columns>
+    <field>ACTIVITY_DATE</field>
+  </columns>
+  <columns>
+    <field>TASK_PRIORITY</field>
+  </columns>
+  <columns>
+    <field>TASK_STATUS</field>
+  </columns>
+  <columns>
+    <field>ACCOUNT_NAME</field>
+  </columns>
+  <columns>
+    <field>TASK_DESCRIPTION</field>
+  </columns>
+  <filter>
+    <criteriaItems>
+      <column>TASK_SUBJECT</column>
+      <operator>startsWith</operator>
+      <value>[FundOps]</value>
+    </criteriaItems>
+    <criteriaItems>
+      <column>TASK_STATUS</column>
+      <operator>notEqual</operator>
+      <value>Completed</value>
+    </criteriaItems>
+  </filter>
+  <groupingsDown>
+    <dateGranularity>Day</dateGranularity>
+    <field>ACTIVITY_DATE</field>
+    <sortOrder>Asc</sortOrder>
+  </groupingsDown>
+  <sortColumn>ACTIVITY_DATE</sortColumn>
+  <sortOrder>Asc</sortOrder>
+  <showDetails>true</showDetails>
+</Report>

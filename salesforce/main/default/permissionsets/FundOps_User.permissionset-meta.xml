@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+  <description>FundOps MVP permissions for Julie.</description>
+  <hasActivationRequired>false</hasActivationRequired>
+  <label>FundOps User</label>
+
+  <!-- Account FundOps fields — read + edit -->
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Account.FundOps_Enabled__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Primary_Program__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Score__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Priority__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Summary__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Next_Action__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Data_Confidence__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Last_Refresh__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Account.FundOps_Refresh_Requested__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Account.FundOps_Last_Error__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Account.FundOps_IRS_EIN__c</field>
+  </fieldPermissions>
+
+  <!-- Opportunity FundOps fields — read + edit on intake fields -->
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Program__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Opportunity_Type__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Eligibility__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Deadline__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Score__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>true</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Source_URL__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Summary__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Opportunity.FundOps_Next_Action__c</field>
+  </fieldPermissions>
+  <fieldPermissions>
+    <editable>false</editable><readable>true</readable>
+    <field>Opportunity.FundOps_External_ID__c</field>
+  </fieldPermissions>
+
+  <!-- FundOps Signal object — read-only for Julie -->
+  <objectPermissions>
+    <allowCreate>false</allowCreate>
+    <allowDelete>false</allowDelete>
+    <allowEdit>false</allowEdit>
+    <allowRead>true</allowRead>
+    <modifyAllRecords>false</modifyAllRecords>
+    <object>FundOps_Signal__c</object>
+    <viewAllRecords>true</viewAllRecords>
+  </objectPermissions>
+</PermissionSet>

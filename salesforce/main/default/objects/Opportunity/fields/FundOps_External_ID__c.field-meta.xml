@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>FundOps_External_ID__c</fullName>
+  <label>FundOps External ID</label>
+  <type>Text</type><length>255</length><externalId>true</externalId><unique>true</unique>
+</CustomField>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>Observation_Type__c</fullName>
+  <label>Observation Type</label>
+  <type>Picklist</type>
+  <valueSet><valueSetDefinition><sorted>false</sorted><value><fullName>Observed</fullName><default>true</default></value><value><fullName>Inferred</fullName><default>false</default></value></valueSetDefinition></valueSet>
+</CustomField>

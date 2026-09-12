@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+  <description>All FundOps-enabled Accounts ranked by FundOps Score with priority tier and next recommended action. Used by Julie during weekly pipeline reviews.</description>
+  <format>Summary</format>
+  <name>FundOps Priority Accounts</name>
+  <reportType>Account</reportType>
+  <columns>
+    <field>ACCOUNT_NAME</field>
+  </columns>
+  <columns>
+    <field>FundOps_Score__c</field>
+  </columns>
+  <columns>
+    <field>FundOps_Priority__c</field>
+  </columns>
+  <columns>
+    <field>FundOps_Next_Action__c</field>
+  </columns>
+  <columns>
+    <field>FundOps_Data_Confidence__c</field>
+  </columns>
+  <columns>
+    <field>FundOps_Last_Refresh__c</field>
+  </columns>
+  <columns>
+    <field>FundOps_Primary_Program__c</field>
+  </columns>
+  <filter>
+    <criteriaItems>
+      <column>FundOps_Enabled__c</column>
+      <operator>equals</operator>
+      <value>True</value>
+    </criteriaItems>
+  </filter>
+  <groupingsDown>
+    <dateGranularity>Day</dateGranularity>
+    <field>FundOps_Priority__c</field>
+    <sortOrder>Desc</sortOrder>
+  </groupingsDown>
+  <sortColumn>FundOps_Score__c</sortColumn>
+  <sortOrder>Desc</sortOrder>
+  <showDetails>true</showDetails>
+</Report>

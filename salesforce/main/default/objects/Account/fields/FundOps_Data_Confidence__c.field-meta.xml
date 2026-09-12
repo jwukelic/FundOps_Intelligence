@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>FundOps_Data_Confidence__c</fullName>
+  <label>FundOps Data Confidence</label>
+  <type>Percent</type><precision>5</precision><scale>2</scale>
+</CustomField>
