@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "salesforce/main/default",
+      "default": true
+    }
+  ],
+  "name": "FundOps Intelligence",
+  "namespace": "",
+  "sourceApiVersion": "61.0"
+}
+
